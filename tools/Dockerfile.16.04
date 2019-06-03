@@ -1,19 +1,11 @@
 FROM ubuntu:16.04
 
-COPY bazel_release.pub.gpg /tmp/bazel_release.pub.gpg
 COPY sources.list.16.04 /etc/apt/sources.list
 COPY glibc_compat.h.16.04 /usr/include/glibc_compat.h
 
 ARG APT_NONINTERACTIVE='-y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold'
 
-RUN apt-get ${APT_NONINTERACTIVE} update
-RUN apt-get ${APT_NONINTERACTIVE} install ca-certificates gnupg
-
-RUN cat /tmp/bazel_release.pub.gpg | apt-key add -
-RUN echo "deb http://storage.googleapis.com/bazel-apt stable jdk1.8" >> /etc/apt/sources.list
-
-ARG PACKAGES="bazel \
-    build-essential \
+ARG PACKAGES="build-essential \
     clang-4.0 \
     crossbuild-essential-arm64 \
     crossbuild-essential-armhf \
@@ -39,6 +31,22 @@ RUN dpkg --add-architecture armhf
 RUN apt-get ${APT_NONINTERACTIVE} update
 RUN apt-get ${APT_NONINTERACTIVE} install -y ${PACKAGES}
 
+ARG PACKAGES_FOR_BAZEL="pkg-config \
+    zip \
+    g++ \
+    zlib1g-dev \
+    unzip \
+    python \
+    wget"
+
+# Install bazel 0.24.1.
+RUN apt-get ${APT_NONINTERACTIVE} install -y ${PACKAGES_FOR_BAZEL}
+RUN wget https://github.com/bazelbuild/bazel/releases/download/0.24.1/bazel-0.24.1-installer-linux-x86_64.sh
+RUN chmod +x bazel-0.24.1-installer-linux-x86_64.sh
+RUN ./bazel-0.24.1-installer-linux-x86_64.sh
+# Clean up.
+RUN rm bazel-0.24.1-installer-linux-x86_64.sh
+
 # Workaround for libc++/libc++abi bug on Raspbian
 #
 # Version of libc++/libc++abi:
@@ -49,7 +57,6 @@ RUN apt-get ${APT_NONINTERACTIVE} install -y ${PACKAGES}
 #
 # This toolchain will download LLVM libc++/libc++abi (version 1:7.0) and
 # statically link it.
-RUN apt-get ${APT_NONINTERACTIVE} install -y wget
 RUN wget http://ftp.us.debian.org/debian/pool/main/l/llvm-toolchain-7/libc++-7-dev_7.0.1-8_armhf.deb
 RUN dpkg-deb -R libc++-7-dev_7.0.1-8_armhf.deb /tmp
 RUN wget http://ftp.us.debian.org/debian/pool/main/l/llvm-toolchain-7/libc++abi-7-dev_7.0.1-8_armhf.deb
