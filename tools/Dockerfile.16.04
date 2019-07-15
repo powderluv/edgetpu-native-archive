@@ -1,0 +1,49 @@
+FROM ubuntu:16.04
+
+COPY sources.list.16.04 /etc/apt/sources.list
+COPY glibc_compat.h.16.04 /usr/include/glibc_compat.h
+
+ARG APT_NONINTERACTIVE='-y -o Dpkg::Options::=--force-confdef -o Dpkg::Options::=--force-confold'
+
+ARG PACKAGES="build-essential \
+    clang-4.0 \
+    crossbuild-essential-arm64 \
+    crossbuild-essential-armhf \
+    git-core \
+    libc6-dev \
+    libc++-dev \
+    libc++-dev:arm64 \
+    libc++-dev:armhf \
+    libusb-1.0-0 \
+    libusb-1.0-0:arm64 \
+    libusb-1.0-0:armhf \
+    libc++abi-dev \
+    libc++abi-dev:arm64 \
+    libc++abi-dev:armhf \
+    libpython3-dev \
+    libpython3-dev:arm64 \
+    libpython3-dev:armhf \
+    python3-numpy \
+    libunwind-dev:armhf"
+
+RUN dpkg --add-architecture arm64
+RUN dpkg --add-architecture armhf
+RUN apt-get ${APT_NONINTERACTIVE} update
+RUN apt-get ${APT_NONINTERACTIVE} install -y ${PACKAGES}
+
+ARG PACKAGES_FOR_BAZEL="pkg-config \
+    zip \
+    g++ \
+    zlib1g-dev \
+    unzip \
+    python \
+    python-future \
+    wget"
+
+# Install bazel 0.24.1.
+RUN apt-get ${APT_NONINTERACTIVE} install -y ${PACKAGES_FOR_BAZEL}
+RUN wget https://github.com/bazelbuild/bazel/releases/download/0.24.1/bazel-0.24.1-installer-linux-x86_64.sh
+RUN chmod +x bazel-0.24.1-installer-linux-x86_64.sh
+RUN ./bazel-0.24.1-installer-linux-x86_64.sh
+# Clean up.
+RUN rm bazel-0.24.1-installer-linux-x86_64.sh

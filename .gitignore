@@ -1,0 +1,12 @@
+*bazel-*
+*__pycache__
+swig_out/
+cpp_example_out/
+models_tool/
+
+# ignore generated files in qa_test/
+qa_test/*
+!qa_test/experimental/*
+!qa_test/release/*
+!qa_test/prepare_qa_test.sh
+!qa_test/run_tests.sh
