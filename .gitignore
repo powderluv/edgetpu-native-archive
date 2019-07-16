@@ -4,9 +4,13 @@ swig_out/
 cpp_example_out/
 models_tool/
 
-# ignore generated files in qa_test/
-qa_test/*
-!qa_test/experimental/*
-!qa_test/release/*
-!qa_test/prepare_qa_test.sh
-!qa_test/run_tests.sh
+# Ignore generated files in ./qa_test/, but keeps some folders.
+# The rule for exclusion is complicated. See this example:
+# https://stackoverflow.com/questions/35278885/gitignore-exclusion-is-not-working-for-a-single-file
+# Do NOT ignore ./qa_test folder
+!./qa_test/
+!./qa_test/experimental/*
+!./qa_test/release/*
+!./qa_test/prepare_qa_test.sh
+!./qa_test/run_tests.sh
+./qa_test/*

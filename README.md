@@ -23,7 +23,8 @@ example,
 Note: rules that start with `docker` should be invoked from host machine.
 
 Additionally, you can build all of the tests and benchmarks with
-`./qa_test/prepare_qa_test.sh` and run all of them with `./qa_test/run_tests.sh`
+`./qa_test/release/prepare_qa_test.sh` and run all of them with
+`./qa_test/release/run_tests.sh`
 
 For details about C++ API, checkout our
 [docs](https://coral.withgoogle.com/docs/edgetpu/api-cpp/)
