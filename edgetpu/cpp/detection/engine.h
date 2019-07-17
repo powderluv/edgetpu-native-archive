@@ -9,30 +9,20 @@
 namespace coral {
 
 struct DetectionCandidate {
-  DetectionCandidate(const int id_, const float score_, float x1, float y1,
-                     float x2, float y2)
-      : id(id_), score(score_), bounding_box({x1, y1, x2, y2}) {}
   int id;
   float score;
   Box bounding_box;
-
-  DetectionCandidate& operator=(const DetectionCandidate& val) {
-    id = val.id;
-    score = val.score;
-    bounding_box = val.bounding_box;
-    return *this;
-  }
-
-  bool operator==(const DetectionCandidate& val) const {
-    return (id == val.id && score == val.score);
-  }
-  bool operator<(const DetectionCandidate& val) const {
-    return (score < val.score || ((score == val.score) && id < val.id));
-  }
-  bool operator>(const DetectionCandidate& val) const {
-    return (score > val.score || ((score == val.score) && id > val.id));
-  }
 };
+// Compare based on id and score only.
+inline bool operator==(const DetectionCandidate& x,
+                       const DetectionCandidate& y) {
+  return x.score == y.score && x.id == y.id && x.bounding_box == y.bounding_box;
+}
+
+inline bool operator!=(const DetectionCandidate& x,
+                       const DetectionCandidate& y) {
+  return !(x == y);
+}
 
 class DetectionEngine : public BasicEngine {
  public:

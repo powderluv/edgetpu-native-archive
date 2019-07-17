@@ -3,10 +3,20 @@
 #include <algorithm>
 #include <functional>
 #include <queue>
+#include <tuple>
 
 #include "glog/logging.h"
 
 namespace coral {
+
+// Defines a comparator which allows us to rank ClassificationCandidate based on
+// their score and id.
+struct ClassificationCandidateComparator {
+  bool operator()(const ClassificationCandidate& lhs,
+                  const ClassificationCandidate& rhs) const {
+    return std::tie(lhs.score, lhs.id) > std::tie(rhs.score, rhs.id);
+  }
+};
 
 void ClassificationEngine::Validate() {
   std::vector<int> output_tensor_sizes = get_all_output_tensors_sizes();
@@ -21,19 +31,13 @@ ClassificationEngine::ClassifyWithInputTensor(const std::vector<uint8_t>& input,
   std::vector<float> scores = RunInference(input)[0];
   std::priority_queue<ClassificationCandidate,
                       std::vector<ClassificationCandidate>,
-                      std::greater<ClassificationCandidate>>
+                      ClassificationCandidateComparator>
       q;
-  for (int i = 0; i < scores.size(); ++i)
-    if (scores[i] > threshold) {
-      ClassificationCandidate tmp(i, scores[i]);
-      if (q.size() < top_k || tmp > q.top()) {
-        if (q.size() >= top_k) {
-          // Remove the smallest one.
-          q.pop();
-        }
-        q.push(tmp);
-      }
-    }
+  for (int i = 0; i < scores.size(); ++i) {
+    if (scores[i] < threshold) continue;
+    q.push(ClassificationCandidate(i, scores[i]));
+    if (q.size() > top_k) q.pop();
+  }
 
   std::vector<ClassificationCandidate> ret;
   while (!q.empty()) {

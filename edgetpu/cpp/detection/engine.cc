@@ -4,10 +4,20 @@
 #include <cmath>
 #include <functional>
 #include <queue>
+#include <tuple>
 
 #include "glog/logging.h"
 
 namespace coral {
+
+// Defines a comparator which allows us to rank DetectionCandidate based on
+// their score and id.
+struct DetectionCandidateComparator {
+  bool operator()(const DetectionCandidate& lhs,
+                  const DetectionCandidate& rhs) const {
+    return std::tie(lhs.score, lhs.id) > std::tie(rhs.score, rhs.id);
+  }
+};
 
 void DetectionEngine::Validate() {
   std::vector<int> output_tensor_sizes = get_all_output_tensors_sizes();
@@ -25,26 +35,19 @@ std::vector<DetectionCandidate> DetectionEngine::DetectWithInputTensor(
   int n = lround(output[3][0]);
 
   std::priority_queue<DetectionCandidate, std::vector<DetectionCandidate>,
-                      std::greater<DetectionCandidate>>
+                      DetectionCandidateComparator>
       q;
 
   for (int i = 0; i < n; ++i) {
     int id = lround(output[1][i]);
     float score = output[2][i];
+    if (score < threshold) continue;
     float y1 = std::max(static_cast<float>(0.0), output[0][4 * i]);
     float x1 = std::max(static_cast<float>(0.0), output[0][4 * i + 1]);
     float y2 = std::min(static_cast<float>(1.0), output[0][4 * i + 2]);
     float x2 = std::min(static_cast<float>(1.0), output[0][4 * i + 3]);
-    if (score > threshold) {
-      DetectionCandidate tmp(id, score, x1, y1, x2, y2);
-      if (q.size() < top_k || tmp > q.top()) {
-        if (q.size() >= top_k) {
-          // Remove the smallest one.
-          q.pop();
-        }
-        q.push(tmp);
-      }
-    }
+    q.push(DetectionCandidate({id, score, {x1, y1, x2, y2}}));
+    if (q.size() > top_k) q.pop();
   }
 
   std::vector<DetectionCandidate> ret;

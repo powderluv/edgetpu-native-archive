@@ -12,22 +12,17 @@ struct ClassificationCandidate {
       : id(id_), score(score_) {}
   int id;
   float score;
-
-  ClassificationCandidate& operator=(const ClassificationCandidate& val) {
-    id = val.id;
-    score = val.score;
-    return *this;
-  }
-  bool operator==(const ClassificationCandidate& val) const {
-    return (id == val.id && score == val.score);
-  }
-  bool operator<(const ClassificationCandidate& val) const {
-    return (score < val.score || ((score == val.score) && id < val.id));
-  }
-  bool operator>(const ClassificationCandidate& val) const {
-    return (score > val.score || ((score == val.score) && id > val.id));
-  }
 };
+
+inline bool operator==(const ClassificationCandidate& x,
+                       const ClassificationCandidate& y) {
+  return x.score == y.score && x.id == y.id;
+}
+
+inline bool operator!=(const ClassificationCandidate& x,
+                       const ClassificationCandidate& y) {
+  return !(x == y);
+}
 
 class ClassificationEngine : public BasicEngine {
  public:

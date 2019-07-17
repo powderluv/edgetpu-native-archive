@@ -11,6 +11,26 @@ namespace {
 
 using ::testing::ElementsAre;
 
+TEST(DetectionEngineTest, TestDetectionCandidate) {
+  DetectionCandidate a({1, 0.2, {0.0, 0.0, 1.0, 1.0}}),
+      b({1, 0.5, {0.0, 0.0, 1.0, 1.0}});
+  // Equal.
+  EXPECT_TRUE(a == DetectionCandidate({1, 0.2, {0.0, 0.0, 1.0, 1.0}}));
+  EXPECT_FALSE(a == DetectionCandidate({1, 0.2, {0.1, 0.1, 1.0, 1.0}}));
+  EXPECT_FALSE(a == DetectionCandidate({1, 0.2, {0.0, 0.0, 0.9, 0.9}}));
+  EXPECT_FALSE(a == DetectionCandidate({1, 0.19, {0.0, 0.0, 1.0, 1.0}}));
+  EXPECT_FALSE(a == DetectionCandidate({2, 0.2, {0.0, 0.0, 1.0, 1.0}}));
+  EXPECT_TRUE(a != b);
+  EXPECT_FALSE(a == b);
+  // Assign.
+  DetectionCandidate tmp({5, 0.7, {0.0, 0.0, 0.0, 0.0}});
+  EXPECT_TRUE(a != tmp);
+  tmp = a;
+  EXPECT_TRUE(a == tmp);
+  tmp = b;
+  EXPECT_TRUE(a != tmp);
+}
+
 TEST(DetectionEngineTest, TestDebugFunctions) {
   // Load the model.
   DetectionEngine engine(

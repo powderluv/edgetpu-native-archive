@@ -11,6 +11,24 @@ namespace {
 
 using ::testing::ElementsAre;
 
+TEST(ClassificationEngineTest, ClassificationCandidate) {
+  ClassificationCandidate a(1, 0.2), b(1, 0.5);
+  // Equal.
+  EXPECT_TRUE(a == ClassificationCandidate(1, 0.2));
+  EXPECT_FALSE(a == ClassificationCandidate(1, 0.19));
+  EXPECT_FALSE(a == ClassificationCandidate(2, 0.2));
+  // Not Equal.
+  EXPECT_TRUE(a != b);
+  EXPECT_FALSE(a == b);
+  // Assign.
+  ClassificationCandidate tmp(5, 0.7);
+  EXPECT_TRUE(a != tmp);
+  tmp = a;
+  EXPECT_TRUE(a == tmp);
+  tmp = b;
+  EXPECT_TRUE(a != tmp);
+}
+
 TEST(ClassificationEngineTest, TestDebugFunctions) {
   // Load the model.
   ClassificationEngine mobilenet_engine(
