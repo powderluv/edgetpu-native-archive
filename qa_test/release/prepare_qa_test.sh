@@ -64,26 +64,18 @@ cp -r ${ROOT_DIR}/cpp_example_out/* ${ROOT_DIR}/qa_test
 
 mkdir -p ${ROOT_DIR}/qa_test/cpp_example_data
 
-# Download test data for cpp example.
-wget -O ${ROOT_DIR}/qa_test/cpp_example_data/inat_bird_edgetpu.tflite \
-      http://storage.googleapis.com/cloud-iot-edge-pretrained-models/canned_models/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite
-wget -O ${ROOT_DIR}/qa_test/cpp_example_data/inat_plant_edgetpu.tflite \
-      http://storage.googleapis.com/cloud-iot-edge-pretrained-models/canned_models/mobilenet_v2_1.0_224_inat_plant_quant_edgetpu.tflite
-wget -O ${ROOT_DIR}/qa_test/cpp_example_data/bird.jpg \
-      https://farm3.staticflickr.com/4003/4510152748_b43c1da3e6_o.jpg
-wget -O ${ROOT_DIR}/qa_test/cpp_example_data/plant.jpg \
-      https://c2.staticflickr.com/1/62/184682050_db90d84573_o.jpg
-
-# Convert to BMP format.
-sudo apt-get install imagemagick
-cd ${ROOT_DIR}/qa_test/cpp_example_data/
-mogrify -format bmp *.jpg
-
 # Copy test data.
 cp -R ${ROOT_DIR}/edgetpu/cpp/basic/test_data  ${ROOT_DIR}/qa_test
 cp -R ${ROOT_DIR}/edgetpu/cpp/basic/invalid_models  ${ROOT_DIR}/qa_test
 cp -R ${ROOT_DIR}/edgetpu/cpp/learn/imprinting/test_data ${ROOT_DIR}/qa_test/imprinting_test_data
 cp -R ${ROOT_DIR}/edgetpu/cpp/posenet/test_data ${ROOT_DIR}/qa_test/posenet_test_data
+
+# Copy models for cpp example.
+cp ${ROOT_DIR}/edgetpu/cpp/basic/test_data/bird.bmp ${ROOT_DIR}/qa_test/cpp_example_data/bird.bmp
+cp ${ROOT_DIR}/edgetpu/cpp/basic/test_data/sunflower.bmp ${ROOT_DIR}/qa_test/cpp_example_data/plant.bmp
+cp ${ROOT_DIR}/edgetpu/cpp/basic/test_data/mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite ${ROOT_DIR}/qa_test/cpp_example_data/inat_bird_edgetpu.tflite
+cp ${ROOT_DIR}/edgetpu/cpp/basic/test_data/mobilenet_v2_1.0_224_inat_plant_quant_edgetpu.tflite ${ROOT_DIR}/qa_test/cpp_example_data/inat_plant_edgetpu.tflite
+
 # Copy runtime.
 cp -R ${ROOT_DIR}/libedgetpu ${ROOT_DIR}/qa_test
 # Set permissions.

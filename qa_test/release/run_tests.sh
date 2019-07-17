@@ -37,6 +37,7 @@ if [[ "$cpu_arch" == "x86_64" ]] && [[ "$os_version" == *"Debian"* || "$os_versi
   platform="x86_64"
   LIBEDGETPU_SUFFIX=x86_64
   HOST_GNU_TYPE=x86_64-linux-gnu
+  REQUEST_FOR_MULTI_EDGETPU_TEST=3000
   info "Recognized as Linux on x86_64!"
 elif [[ "$cpu_arch" == "armv7l" ]]; then
   board_version=$(cat /proc/device-tree/model)
@@ -44,17 +45,20 @@ elif [[ "$cpu_arch" == "armv7l" ]]; then
     platform="arm32"
     LIBEDGETPU_SUFFIX=arm32
     HOST_GNU_TYPE=arm-linux-gnueabihf
+    REQUEST_FOR_MULTI_EDGETPU_TEST=1000
     info "Recognized as Raspberry Pi 3 B!"
   elif [[ "$board_version" == "Raspberry Pi 3 Model B Plus Rev"* ]]; then
     platform="arm32"
     LIBEDGETPU_SUFFIX=arm32
     HOST_GNU_TYPE=arm-linux-gnueabihf
+    REQUEST_FOR_MULTI_EDGETPU_TEST=1000
     info "Recognized as Raspberry Pi 3 B+!"
   fi
 elif [[ -f /etc/mendel_version ]]; then
   platform="arm64"
   LIBEDGETPU_SUFFIX=arm64
   HOST_GNU_TYPE=aarch64-linux-gnu
+  REQUEST_FOR_MULTI_EDGETPU_TEST=3000
   info "Recognized as Edge TPU DevBoard!"
 else
   error "Platform not supported!"
@@ -131,10 +135,10 @@ function multiple_edgetpu_tests() {
   "${ROOT_DIR}/qa_test/${platform}"/multiple_tpus_inference_stress_test \
     --model_dir="${ROOT_DIR}/qa_test/test_data" \
     --test_data_dir="${ROOT_DIR}/qa_test/test_data"
-
   "${ROOT_DIR}/qa_test/${platform}"/multiple_tpus_performance_analysis \
     --model_dir="${ROOT_DIR}/qa_test/test_data" \
-    --test_data_dir="${ROOT_DIR}/qa_test/test_data"
+    --test_data_dir="${ROOT_DIR}/qa_test/test_data" \
+    --num_requests="${REQUEST_FOR_MULTI_EDGETPU_TEST}"
 }
 multiple_edgetpu_tests
 
