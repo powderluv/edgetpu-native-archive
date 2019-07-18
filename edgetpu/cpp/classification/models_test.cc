@@ -134,38 +134,39 @@ TEST(ClassificationEngineTest, TestINatModels) {
       /*expected_top1_label=*/659);  // Black-capped Chickadee
 }
 
-TEST(ClassificationEngineTest, TestEdgeTpuNetModelsCustomPreprocessing) {
+TEST(ClassificationEngineTest,
+     TestEfficientNetEdgeTpuModelsCustomPreprocessing) {
   const int kTopk = 3;
   // Custom preprocessing is done by:
   // (v - (mean - zero_point * scale * stddev)) / (stddev * scale)
   {
     // mean 127, stddev 128
-    // first input tensor scale: 0.011584, zero_point: 125
-    const float effective_scale = 128 * 0.011584;
-    const std::vector<float> effective_means(3, 127 - 125 * effective_scale);
-    TestClassification(ModelPath("edgetpu_net_small_quant.tflite"),
-                       TestDataPath("cat.bmp"), effective_scale,
-                       effective_means,
-                       /*score_threshold=*/0.4, kTopk,
-                       /*expected_topk_label=*/286);  // Egyptian cat
-    TestClassification(ModelPath("edgetpu_net_small_quant_edgetpu.tflite"),
-                       TestDataPath("cat.bmp"), effective_scale,
-                       effective_means,
-                       /*score_threshold=*/0.4, kTopk,
-                       /*expected_topk_label=*/286);  // Egyptian cat
-  }
-
-  {
-    // mean 127, stddev 128
-    // first input tensor scale: 0.012087, zero_point: 131
-    const float effective_scale = 128 * 0.012087;
+    // first input tensor scale: 0.012566, zero_point: 131
+    const float effective_scale = 128 * 0.012566;
     const std::vector<float> effective_means(3, 127 - 131 * effective_scale);
-    TestClassification(ModelPath("edgetpu_net_medium_quant.tflite"),
+    TestClassification(ModelPath("efficientnet-edgetpu-S_quant.tflite"),
+                       TestDataPath("cat.bmp"), effective_scale,
+                       effective_means,
+                       /*score_threshold=*/0.4, kTopk,
+                       /*expected_topk_label=*/286);  // Egyptian cat
+    TestClassification(ModelPath("efficientnet-edgetpu-S_quant_edgetpu.tflite"),
+                       TestDataPath("cat.bmp"), effective_scale,
+                       effective_means,
+                       /*score_threshold=*/0.4, kTopk,
+                       /*expected_topk_label=*/286);  // Egyptian cat
+  }
+
+  {
+    // mean 127, stddev 128
+    // first input tensor scale: 0.012089, zero_point: 129
+    const float effective_scale = 128 * 0.012089;
+    const std::vector<float> effective_means(3, 127 - 129 * effective_scale);
+    TestClassification(ModelPath("efficientnet-edgetpu-M_quant.tflite"),
                        TestDataPath("cat.bmp"), effective_scale,
                        effective_means,
                        /*score_threshold=*/0.6, kTopk,
                        /*expected_topk_label=*/286);  // Egyptian cat
-    TestClassification(ModelPath("edgetpu_net_medium_quant_edgetpu.tflite"),
+    TestClassification(ModelPath("efficientnet-edgetpu-M_quant_edgetpu.tflite"),
                        TestDataPath("cat.bmp"), effective_scale,
                        effective_means,
                        /*score_threshold=*/0.6, kTopk,
@@ -174,15 +175,15 @@ TEST(ClassificationEngineTest, TestEdgeTpuNetModelsCustomPreprocessing) {
 
   {
     // mean 127, stddev 128
-    // first input tensor scale: 0.012279, zero_point: 130
-    const float effective_scale = 128 * 0.012279;
-    const std::vector<float> effective_means(3, 127 - 130 * effective_scale);
-    TestClassification(ModelPath("edgetpu_net_large_quant.tflite"),
+    // first input tensor scale: 0.01246, zero_point: 129
+    const float effective_scale = 128 * 0.01246;
+    const std::vector<float> effective_means(3, 127 - 129 * effective_scale);
+    TestClassification(ModelPath("efficientnet-edgetpu-L_quant.tflite"),
                        TestDataPath("cat.bmp"), effective_scale,
                        effective_means,
                        /*score_threshold=*/0.6, kTopk,
                        /*expected_topk_label=*/286);  // Egyptian cat
-    TestClassification(ModelPath("edgetpu_net_large_quant_edgetpu.tflite"),
+    TestClassification(ModelPath("efficientnet-edgetpu-L_quant_edgetpu.tflite"),
                        TestDataPath("cat.bmp"), effective_scale,
                        effective_means,
                        /*score_threshold=*/0.6, kTopk,

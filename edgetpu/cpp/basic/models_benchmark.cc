@@ -292,37 +292,37 @@ BENCHMARK_TEMPLATE(BM_Compilation_Four_Large, kCoCompilation);
 BENCHMARK_TEMPLATE(BM_Compilation_Four_Large, kSingleCompilation);
 
 template <coral::CnnProcessorType CnnProcessor>
-static void BM_EdgeTpuNetSmall(benchmark::State& state) {
+static void BM_EfficientNetEdgeTpuSmall(benchmark::State& state) {
   const std::string model_path =
       coral::ModelPath((CnnProcessor == coral::kEdgeTpu)
-                           ? "edgetpu_net_small_quant_edgetpu.tflite"
-                           : "edgetpu_net_small_quant.tflite");
+                           ? "efficientnet-edgetpu-S_quant_edgetpu.tflite"
+                           : "efficientnet-edgetpu-S_quant.tflite");
   coral::BenchmarkModelOnEdgeTpu(model_path, state);
 }
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetSmall, coral::kEdgeTpu);
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetSmall, coral::kCpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuSmall, coral::kEdgeTpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuSmall, coral::kCpu);
 
 template <coral::CnnProcessorType CnnProcessor>
-static void BM_EdgeTpuNetMedium(benchmark::State& state) {
+static void BM_EfficientNetEdgeTpuMedium(benchmark::State& state) {
   const std::string model_path =
       coral::ModelPath((CnnProcessor == coral::kEdgeTpu)
-                           ? "edgetpu_net_medium_quant_edgetpu.tflite"
-                           : "edgetpu_net_medium_quant.tflite");
+                           ? "efficientnet-edgetpu-M_quant_edgetpu.tflite"
+                           : "efficientnet-edgetpu-M_quant.tflite");
   coral::BenchmarkModelOnEdgeTpu(model_path, state);
 }
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetMedium, coral::kEdgeTpu);
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetMedium, coral::kCpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuMedium, coral::kEdgeTpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuMedium, coral::kCpu);
 
 template <coral::CnnProcessorType CnnProcessor>
-static void BM_EdgeTpuNetLarge(benchmark::State& state) {
+static void BM_EfficientNetEdgeTpuLarge(benchmark::State& state) {
   const std::string model_path =
       coral::ModelPath((CnnProcessor == coral::kEdgeTpu)
-                           ? "edgetpu_net_large_quant_edgetpu.tflite"
-                           : "edgetpu_net_large_quant.tflite");
+                           ? "efficientnet-edgetpu-L_quant_edgetpu.tflite"
+                           : "efficientnet-edgetpu-L_quant.tflite");
   coral::BenchmarkModelOnEdgeTpu(model_path, state);
 }
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetLarge, coral::kEdgeTpu);
-BENCHMARK_TEMPLATE(BM_EdgeTpuNetLarge, coral::kCpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuLarge, coral::kEdgeTpu);
+BENCHMARK_TEMPLATE(BM_EfficientNetEdgeTpuLarge, coral::kCpu);
 
 }  // namespace coral
 
