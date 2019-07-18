@@ -8,7 +8,7 @@
 // 3. wget -O /tmp/edgetpu_cpp_example/inat_plant_edgetpu.tflite \
 //      http://storage.googleapis.com/cloud-iot-edge-pretrained-models/canned_models/mobilenet_v2_1.0_224_inat_plant_quant_edgetpu.tflite
 // 4. wget -O /tmp/edgetpu_cpp_example/bird.jpg \
-//      https://farm3.staticflickr.com/4003/4510152748_b43c1da3e6_o.jpg
+//      https://farm3.staticflickr.com/8008/7523974676_40bbeef7e3_o.jpg
 // 5. wget -O /tmp/edgetpu_cpp_example/plant.jpg \
 //      https://c2.staticflickr.com/1/62/184682050_db90d84573_o.jpg
 // 6. cd /tmp/edgetpu_cpp_example && mogrify -format bmp *.jpg

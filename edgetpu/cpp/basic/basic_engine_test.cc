@@ -89,12 +89,12 @@ TEST(BasicEngineTest, TwoEnginesSharedEdgeTpuSingleThreadInference) {
     results = engine_1.RunInference(bird_input);
     ASSERT_EQ(1, results.size());
     result = results[0];
-    EXPECT_GT(result[17], 0.60);  // house finch, linnet, Carpodacus mexicanus
+    EXPECT_GT(result[20], 0.96);  // chickadee
 
     results = engine_2.RunInference(bird_input);
     ASSERT_EQ(1, results.size());
     result = results[0];
-    EXPECT_GT(result[11], 0.78);  // goldfinch, Carduelis carduelis
+    EXPECT_GT(result[20], 0.92);  // chickadee
   }
 }
 
@@ -128,7 +128,7 @@ TEST(BasicEngineTest, TwoEnginesSharedEdgeTpuMultiThreadInference) {
       const auto &results = engine.RunInference(bird_input);
       ASSERT_EQ(1, results.size());
       const auto &result = results[0];
-      EXPECT_GT(result[91], 0.89);  // White-throated Sparrow
+      EXPECT_GT(result[659], 0.53);  // Black-capped Chickadee
       const auto sleep_time = sleep_time_dist(generator);
       std::this_thread::sleep_for(std::chrono::milliseconds(sleep_time));
       LOG(INFO) << "Thread: " << tid << " sleep for " << sleep_time << " ms.";

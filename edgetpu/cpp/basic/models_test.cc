@@ -37,8 +37,8 @@ TEST(ModelCorrectnessTest, TestMobilenetV1WithL2Norm) {
   result = results[0];
   class_max = std::distance(result.begin(),
                             std::max_element(result.begin(), result.end()));
-  EXPECT_EQ(class_max, 17);
-  EXPECT_GT(result[17], 0.50);  // house finch, linnet, Carpodacus mexicanus
+  EXPECT_EQ(class_max, 20);
+  EXPECT_GT(result[20], 0.97);  // chickadee
 }
 
 // TODO: move co-compile tests into a separate test file.

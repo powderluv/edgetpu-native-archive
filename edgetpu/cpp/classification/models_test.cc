@@ -106,12 +106,12 @@ TEST(ClassificationEngineTest, TestINatModels) {
   TestClassification(
       ModelPath("mobilenet_v2_1.0_224_inat_plant_quant.tflite"),
       TestDataPath("sunflower.bmp"),
-      /*score_threshold=*/0.4,
+      /*score_threshold=*/0.8,
       /*expected_top1_label=*/1680);  // Helianthus annuus (common sunflower)
   TestClassification(
       ModelPath("mobilenet_v2_1.0_224_inat_plant_quant_edgetpu.tflite"),
       TestDataPath("sunflower.bmp"),
-      /*score_threshold=*/0.4,
+      /*score_threshold=*/0.8,
       /*expected_top1_label=*/1680);  // Helianthus annuus (common sunflower)
 
   // Insect model
@@ -125,13 +125,13 @@ TEST(ClassificationEngineTest, TestINatModels) {
 
   // Bird model
   TestClassification(ModelPath("mobilenet_v2_1.0_224_inat_bird_quant.tflite"),
-                     TestDataPath("bird.bmp"),
-                     /*score_threshold=*/0.8,
-                     /*expected_top1_label=*/91);  // White-throated Sparrow
+                     TestDataPath("bird.bmp"), /*score_threshold=*/0.5,
+                     /*expected_top1_label=*/659);  // Black-capped Chickadee
+
   TestClassification(
       ModelPath("mobilenet_v2_1.0_224_inat_bird_quant_edgetpu.tflite"),
-      TestDataPath("bird.bmp"), /*score_threshold=*/0.8,
-      /*expected_top1_label=*/91);  // White-throated Sparrow
+      TestDataPath("bird.bmp"), /*score_threshold=*/0.5,
+      /*expected_top1_label=*/659);  // Black-capped Chickadee
 }
 
 TEST(ClassificationEngineTest, TestEdgeTpuNetModelsCustomPreprocessing) {
